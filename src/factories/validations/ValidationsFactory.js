@@ -1,10 +1,8 @@
 (() => {
   angular.module('ngNucleus').factory('Validations', [
-    'validator',
-    'BrV',
+    '$window',
     (
-      validator,
-      BrV
+      $window
     ) => {
       const stringDefault = string => {
         string = string.replace(new RegExp('[ÁÀÂÃ]', 'gi'), 'a')
@@ -28,10 +26,10 @@
           return !value.toString().trim().match(/[^a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-+$]/g)
         },
         isUrl: value => {
-          return validator.isURL(value)
+          return $window.validator.isURL(value)
         },
         isCpf: value => {
-          return BrV.cpf.validate(value)
+          return $window.BrV.cpf.validate(value)
         },
         isRg: value => {
           return value.toString().trim().match(/([0-9])/g) && value.length > 0 && value.length < 16
@@ -118,28 +116,28 @@
           return instructions.includes(stringDefault(value.toString().trim().toLowerCase()))
         },
         isDateOnly: value => {
-          return moment(value).isValid()
+          return $window.moment(value).isValid()
         },
         isTimer: value => {
-          return moment(value, 'HH:mm').isValid()
+          return $window.moment(value, 'HH:mm').isValid()
         },
         isCep: value => {
           return value.toString().trim().length === 8
         },
         isBrPhoneNumber: value => {
-          return validator.isMobilePhone(value, ['pt-BR'])
+          return $window.validator.isMobilePhone(value, ['pt-BR'])
         },
         isEmail: value => {
-          return validator.isEmail(value)
+          return $window.validator.isEmail(value)
         },
         isCnpj: value => {
-          return BrV.cnpj.validate(value)
+          return $window.BrV.cnpj.validate(value)
         },
         isIe: (value, state) => {
-          return BrV.ie(state).validate(value)
+          return $window.BrV.ie(state).validate(value)
         },
         isPis: value => {
-          return BrV.pis.validate(value)
+          return $window.BrV.pis.validate(value)
         },
         isBrBoletoBancario: value => {
           return value.length === 47

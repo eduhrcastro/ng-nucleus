@@ -97,7 +97,10 @@
     "FileReader": "readonly",
     "StringMask": "readonly",
     "inject": "readonly",
-    "expect": "readonly"
+    "expect": "readonly",
+    "moment": "readonly",
+    "BrV": "readonly",
+    "validator": "readonly"
   },
   "env": {
     "mocha": true

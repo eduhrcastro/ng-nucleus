@@ -76,10 +76,6 @@
     "umd-templates": "^0.0.3"
   },
   "dependencies": {
-    "angular": "^1.7.8",
-    "angular-moment": "^1.2.0",
-    "br-validations": "^0.3.1",
-    "moment": "^2.22.1",
-    "validator": "^10.2.0"
+    "angular": "^1.7.8"
   }
 }

@@ -3629,7 +3629,7 @@ negotiator@0.6.1:
 
 "ng-nucleus@https://github.com/eduhrcastro/ng-nucleus.git#dev":
   version "1.0.0"
-  resolved "https://github.com/eduhrcastro/ng-nucleus.git#8e7063cf22cdaf77cde496c724a9086855ac9771"
+  resolved "https://github.com/eduhrcastro/ng-nucleus.git#e6b29cd9cad08892c40724ad8af98c8502b069d6"
   dependencies:
     angular "^1.7.8"
     angular-moment "^1.2.0"

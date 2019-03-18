@@ -99,7 +99,7 @@ gulp.task('umd', () => {
       exports: (file) => {
         return 'exports.default'
       },
-      template: patterns.commonjsStrictGlobal.path
+      template: patterns.commonjsStrict.path
     }))
     .pipe(gulp.dest('dist'))
 })

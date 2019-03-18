@@ -1,8 +1,6 @@
 (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', 'angular', 'moment', 'validator', 'BrV'], function (exports, angular, moment, validator, BrV) {
-            factory((root.ngNucleus = exports), angular, moment, validator, BrV);
-        });
+        define(['exports', 'angular', 'moment', 'validator', 'BrV'], factory);
     } else if (typeof exports === 'object') {
         factory(exports, require('angular'), require('angular-moment'), require('validator'), require('br-validations'));
     } else {
@@ -16,6 +14,16 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+if (!angular.isFunction(moment)) {
+  throw new Error('Moment cannot be found by ng-nucleus!');
+} else if (!angular.isFunction(angular)) {
+  throw new Error('Angular cannot be found by ng-nucleus!');
+} else if (!angular.isFunction(validator)) {
+  throw new Error('Validator.js cannot be found by ng-nucleus!');
+} else if (!angular.isFunction(BrV)) {
+  throw new Error('Br-validations.js cannot be found by ng-nucleus!');
+}
+
 exports.default = angular.module('ngNucleus', []);
 'use strict';
 
@@ -26,7 +34,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 };
 
 (function () {
-  angular.module('ngNucleus').directive('uiTitulo', ['$log', 'Validations', function ($log, Validations) {
+  angular.module('ngNucleus').directive('uiTitulo', ['Validations', function (Validations) {
     return {
       require: 'ngModel',
       scope: {
@@ -42,9 +50,6 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         };
 
         var validations = function validations(value) {
-          $log.log(value);
-          $log.log(Validations.isTitulo(value));
-          $log.log(Validations.isBrPhoneNumber('5585996592604'));
           return Validations.isTitulo(value);
         };
 
@@ -102,7 +107,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 'use strict';
 
 (function () {
-  angular.module('ngNucleus').factory('Validations', ['validator', 'BrV', function (validator, BrV) {
+  angular.module('ngNucleus').factory('Validations', ['$window', function ($window) {
     var stringDefault = function stringDefault(string) {
       string = string.replace(new RegExp('[ÁÀÂÃ]', 'gi'), 'a');
       string = string.replace(new RegExp('[ÉÈÊ]', 'gi'), 'e');
@@ -125,10 +130,10 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         return !value.toString().trim().match(/[^a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-+$]/g);
       },
       isUrl: function isUrl(value) {
-        return validator.isURL(value);
+        return $window.validator.isURL(value);
       },
       isCpf: function isCpf(value) {
-        return BrV.cpf.validate(value);
+        return $window.BrV.cpf.validate(value);
       },
       isRg: function isRg(value) {
         return value.toString().trim().match(/([0-9])/g) && value.length > 0 && value.length < 16;
@@ -192,28 +197,28 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         return instructions.includes(stringDefault(value.toString().trim().toLowerCase()));
       },
       isDateOnly: function isDateOnly(value) {
-        return moment(value).isValid();
+        return $window.moment(value).isValid();
       },
       isTimer: function isTimer(value) {
-        return moment(value, 'HH:mm').isValid();
+        return $window.moment(value, 'HH:mm').isValid();
       },
       isCep: function isCep(value) {
         return value.toString().trim().length === 8;
       },
       isBrPhoneNumber: function isBrPhoneNumber(value) {
-        return validator.isMobilePhone(value, ['pt-BR']);
+        return $window.validator.isMobilePhone(value, ['pt-BR']);
       },
       isEmail: function isEmail(value) {
-        return validator.isEmail(value);
+        return $window.validator.isEmail(value);
       },
       isCnpj: function isCnpj(value) {
-        return BrV.cnpj.validate(value);
+        return $window.BrV.cnpj.validate(value);
       },
       isIe: function isIe(value, state) {
-        return BrV.ie(state).validate(value);
+        return $window.BrV.ie(state).validate(value);
       },
       isPis: function isPis(value) {
-        return BrV.pis.validate(value);
+        return $window.BrV.pis.validate(value);
       },
       isBrBoletoBancario: function isBrBoletoBancario(value) {
         return value.length === 47;
