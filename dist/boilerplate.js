@@ -9,7 +9,10 @@
 }(this, function (exports, angular) {
 'use strict';
 
-angular.module('boilerplate').directive('nclUpperCase', [function () {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = angular.module('boilerplate').directive('nclUpperCase', [function () {
   return {
     require: 'ngModel',
     scope: {

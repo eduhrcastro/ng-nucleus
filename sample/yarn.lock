@@ -3610,9 +3610,9 @@ negotiator@0.6.1:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
   integrity sha1-KzJxhOiZIQEXeyhWP7XnECrNDKk=
 
-"ng-nucleus@https://github.com/eduhrcastro/ng-nucleus.git":
+"ng-nucleus@https://github.com/eduhrcastro/ng-nucleus.git#dev":
   version "1.0.0"
-  resolved "https://github.com/eduhrcastro/ng-nucleus.git#8a67e5f1730d55af6a4e210642c887e605cf268c"
+  resolved "https://github.com/eduhrcastro/ng-nucleus.git#1f480f673e13d0922d46b587516a7d96acb0b682"
   dependencies:
     angular "^1.7.8"
 
