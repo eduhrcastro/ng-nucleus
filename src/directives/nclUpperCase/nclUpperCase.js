@@ -1,4 +1,4 @@
-export default angular.module('boilerplate').directive('nclUpperCase', [() => {
+angular.module('boilerplate', []).directive('nclUpperCase', [() => {
   return {
     require: 'ngModel',
     scope: {

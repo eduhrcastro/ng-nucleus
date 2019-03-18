@@ -28,7 +28,7 @@ gulp.task('vendorsJs', () => {
     'node_modules/angular-route/angular-route.min.js',
     'node_modules/angular-animate/angular-animate.min.js',
     'node_modules/angular-messages/angular-messages.min.js',
-    'node_modules/ng-start-repository/dist/boilerplate.min.js'
+    'node_modules/ng-nucleus/dist/boilerplate.js'
   ])
     .pipe(vendor('vendors.js'))
     .pipe(rename({ suffix: '.min' }))
