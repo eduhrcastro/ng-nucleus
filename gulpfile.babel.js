@@ -10,17 +10,19 @@ import minify from 'gulp-babel-minify'
 import clean from 'gulp-clean'
 import concat from 'gulp-concat'
 import umd from 'gulp-umd'
-import patterns from 'umd-templates'
-import karma from 'karma'
 
 import eslint from 'gulp-eslint'
 import sassLint from 'gulp-sass-lint'
 import htmlhint from 'gulp-htmlhint'
 
+import patterns from 'umd-templates'
+import karma from 'karma'
+
 import path from 'path'
 
 const karmaServer = karma.Server
-const projectName = 'boilerplate'
+const projectName = 'ngNucleus'
+const projectNameFile = 'ng-nucleus'
 
 gulp.task('yarn', () => {
   return gulp.src(['./package.json'])
@@ -34,13 +36,13 @@ gulp.task('concat', () => {
     }))
     .pipe(concat({
       newLine: ';',
-      path: projectName + '.js'
+      path: projectNameFile + '.js'
     }))
     .pipe(gulp.dest('tmp'))
 })
 
 gulp.task('minify', () => {
-  return gulp.src('dist/' + projectName + '.js')
+  return gulp.src('dist/' + projectNameFile + '.js')
     .pipe(minify({
       mangle: false
     }))

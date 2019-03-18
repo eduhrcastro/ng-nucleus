@@ -5,7 +5,7 @@ angular.module('sample', [
   'ngMessages',
   'ngAnimate',
   'ngSanitize',
-  'boilerplate'
+  'ngNucleus'
 ])
   .config(($routeProvider, $locationProvider, $httpProvider) => {
     // Remove '!' from path

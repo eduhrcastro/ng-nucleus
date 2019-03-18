@@ -3612,7 +3612,7 @@ negotiator@0.6.1:
 
 "ng-nucleus@https://github.com/eduhrcastro/ng-nucleus.git#dev":
   version "1.0.0"
-  resolved "https://github.com/eduhrcastro/ng-nucleus.git#1f480f673e13d0922d46b587516a7d96acb0b682"
+  resolved "https://github.com/eduhrcastro/ng-nucleus.git#a9a87d33e930e777295a98772a3e0937218a39c9"
   dependencies:
     angular "^1.7.8"
 
