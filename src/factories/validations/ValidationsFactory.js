@@ -1,10 +1,8 @@
 (() => {
   angular.module('ngNucleus').factory('Validations', [
     '$window',
-    'moment',
     (
-      $window,
-      moment
+      $window
     ) => {
       const stringDefault = string => {
         string = string.replace(new RegExp('[ÁÀÂÃ]', 'gi'), 'a')
