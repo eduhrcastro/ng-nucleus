@@ -14,7 +14,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = angular.module('ngNucleus', []);
+exports.default = angular.module('ngNucleus', ['angularMoment']);
 'use strict';
 
 var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {

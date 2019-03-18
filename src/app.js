@@ -1,1 +1,1 @@
-export default angular.module('ngNucleus', [])
+export default angular.module('ngNucleus', ['angularMoment'])

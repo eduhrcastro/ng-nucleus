@@ -23,8 +23,3 @@ angular.module('sample', ['ngRoute', 'ngMessages', 'ngAnimate', 'ngSanitize', 'n
     $log.log('test of the directive');
   }]);
 })();
-"use strict";
-
-angular.module("views/home/home.html", []).run(["$templateCache", function ($templateCache) {
-    $templateCache.put("templates/home.html", "<input type=\"text\"" + "       ng-model=\"homeCtrl.myText\"" + "       ui-upper-case />" + "" + "{{homeCtrl.myText}}" + "");
-}]);
