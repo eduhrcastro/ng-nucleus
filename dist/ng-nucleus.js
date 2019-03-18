@@ -41,6 +41,8 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 
         var validations = function validations(value) {
           $log.log(value);
+          $log.log(Validations.isTitulo(value));
+          $log.log(Validations.isBrPhoneNumber('5585996592604'));
           return Validations.isTitulo(value);
         };
 
@@ -71,25 +73,6 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
           }
           var actualModelType = _typeof(ngModelCtrl.$modelValue);
           return ngModelCtrl.getModelValue(formattedValue, actualModelType);
-        });
-      }
-    };
-  }]);
-})();
-'use strict';
-
-(function () {
-  angular.module('ngNucleus').directive('uiUpperCase', [function () {
-    return {
-      require: 'ngModel',
-      scope: {
-        ngModel: '=ngModel'
-      },
-      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
-        scope.$watch('ngModel', function (value) {
-          if (value) {
-            scope.ngModel = value.toString().toUpperCase();
-          }
         });
       }
     };
@@ -253,6 +236,25 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       },
       isPosition: function isPosition(value) {
         return true;
+      }
+    };
+  }]);
+})();
+'use strict';
+
+(function () {
+  angular.module('ngNucleus').directive('uiUpperCase', [function () {
+    return {
+      require: 'ngModel',
+      scope: {
+        ngModel: '=ngModel'
+      },
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        scope.$watch('ngModel', function (value) {
+          if (value) {
+            scope.ngModel = value.toString().toUpperCase();
+          }
+        });
       }
     };
   }]);

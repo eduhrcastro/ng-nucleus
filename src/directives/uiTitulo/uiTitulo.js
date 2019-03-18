@@ -22,6 +22,8 @@
 
           const validations = value => {
             $log.log(value)
+            $log.log(Validations.isTitulo(value))
+            $log.log(Validations.isBrPhoneNumber('5585996592604'))
             return Validations.isTitulo(value)
           }
 
