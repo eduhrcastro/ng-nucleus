@@ -3629,13 +3629,9 @@ negotiator@0.6.1:
 
 "ng-nucleus@https://github.com/eduhrcastro/ng-nucleus.git#dev":
   version "1.0.0"
-  resolved "https://github.com/eduhrcastro/ng-nucleus.git#e6b29cd9cad08892c40724ad8af98c8502b069d6"
+  resolved "https://github.com/eduhrcastro/ng-nucleus.git#ecaecfab13ac0d89dc911ea258b948e7366d86ea"
   dependencies:
     angular "^1.7.8"
-    angular-moment "^1.2.0"
-    br-validations "^0.3.1"
-    moment "^2.22.1"
-    validator "^10.2.0"
 
 node-gyp@^3.8.0:
   version "3.8.0"
