@@ -1,6 +1,11 @@
 (() => {
   angular.module('ngNucleus').factory('Validations', [
-    () => {
+    'validator',
+    'BrV',
+    (
+      validator,
+      BrV
+    ) => {
       const stringDefault = string => {
         string = string.replace(new RegExp('[ÁÀÂÃ]', 'gi'), 'a')
         string = string.replace(new RegExp('[ÉÈÊ]', 'gi'), 'e')
