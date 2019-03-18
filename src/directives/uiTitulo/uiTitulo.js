@@ -1,7 +1,9 @@
 (() => {
   angular.module('ngNucleus').directive('uiTitulo', [
+    '$log',
     'Validations',
     (
+      $log,
       Validations
     ) => {
       return {
@@ -19,6 +21,7 @@
           }
 
           const validations = value => {
+            $log.log(value)
             return Validations.isTitulo(value)
           }
 

@@ -24,7 +24,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 };
 
 (function () {
-  angular.module('ngNucleus').directive('uiTitulo', ['Validations', function (Validations) {
+  angular.module('ngNucleus').directive('uiTitulo', ['$log', 'Validations', function ($log, Validations) {
     return {
       require: 'ngModel',
       scope: {
@@ -40,6 +40,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         };
 
         var validations = function validations(value) {
+          $log.log(value);
           return Validations.isTitulo(value);
         };
 
