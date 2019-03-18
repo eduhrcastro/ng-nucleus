@@ -73,21 +73,21 @@ gulp.task('umd', () => {
           {
             name: 'moment',
             amd: 'moment',
-            cjs: 'angular-moment.js',
+            cjs: 'angular-moment',
             global: 'moment',
             param: 'moment'
           },
           {
             name: 'validator',
             amd: 'validator',
-            cjs: 'validator.js',
+            cjs: 'validator',
             global: 'validator',
             param: 'validator'
           },
           {
             name: 'BrV',
             amd: 'BrV',
-            cjs: 'br-validations.js',
+            cjs: 'br-validations',
             global: 'BrV',
             param: 'BrV'
           }
