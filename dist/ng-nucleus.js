@@ -14,13 +14,16 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-if (!angular.isFunction(moment)) {
+if (angular == null) {
+  throw new Error('Angularjs cannot be found by ng-nucleus!');
+}
+if (!angular.isFunction(moment) || angular.isUndefined(moment)) {
   throw new Error('Moment cannot be found by ng-nucleus!');
 }
-if (!angular.isFunction(validator)) {
+if (!angular.isObject(validator) || angular.isUndefined(validator)) {
   throw new Error('Validator.js cannot be found by ng-nucleus!');
 }
-if (!angular.isFunction(BrV)) {
+if (!angular.isObject(BrV) || angular.isUndefined(BrV)) {
   throw new Error('Br-validations.js cannot be found by ng-nucleus!');
 }
 
