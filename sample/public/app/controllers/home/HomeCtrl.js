@@ -1,10 +1,9 @@
 (() => {
   angular.module('sample').controller('HomeCtrl', [
-    'sample',
+    '$log',
     function (
-      sample
+      $log
     ) {
-      let vm = this
-      vm.message = sample.hello()
+      $log.log('test of the directive')
     }])
 })()
