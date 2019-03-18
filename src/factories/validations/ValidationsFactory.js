@@ -1,8 +1,12 @@
 (() => {
   angular.module('ngNucleus').factory('Validations', [
-    '$window',
+    'moment',
+    'validator',
+    'BrV',
     (
-      $window
+      moment,
+      validator,
+      BrV
     ) => {
       const stringDefault = string => {
         string = string.replace(new RegExp('[ÁÀÂÃ]', 'gi'), 'a')
@@ -26,10 +30,10 @@
           return !value.toString().trim().match(/[^a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-+$]/g)
         },
         isUrl: value => {
-          return $window.validator.isURL(value)
+          return validator.isURL(value)
         },
         isCpf: value => {
-          return $window.BrV.cpf.validate(value)
+          return BrV.cpf.validate(value)
         },
         isRg: value => {
           return value.toString().trim().match(/([0-9])/g) && value.length > 0 && value.length < 16
@@ -125,19 +129,19 @@
           return value.toString().trim().length === 8
         },
         isBrPhoneNumber: value => {
-          return $window.validator.isMobilePhone(value, ['pt-BR'])
+          return validator.isMobilePhone(value, ['pt-BR'])
         },
         isEmail: value => {
-          return $window.validator.isEmail(value)
+          return validator.isEmail(value)
         },
         isCnpj: value => {
-          return $window.BrV.cnpj.validate(value)
+          return BrV.cnpj.validate(value)
         },
         isIe: (value, state) => {
-          return $window.BrV.ie(state).validate(value)
+          return BrV.ie(state).validate(value)
         },
         isPis: value => {
-          return $window.BrV.pis.validate(value)
+          return BrV.pis.validate(value)
         },
         isBrBoletoBancario: value => {
           return value.length === 47

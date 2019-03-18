@@ -69,6 +69,27 @@ gulp.task('umd', () => {
             cjs: 'angular',
             global: 'angular',
             param: 'angular'
+          },
+          {
+            name: 'moment',
+            amd: 'moment',
+            cjs: 'moment.js',
+            global: 'moment',
+            param: 'moment'
+          },
+          {
+            name: 'validator',
+            amd: 'validator',
+            cjs: 'validator.js',
+            global: 'validator',
+            param: 'validator'
+          },
+          {
+            name: 'BrV',
+            amd: 'BrV',
+            cjs: 'br-validations.js',
+            global: 'BrV',
+            param: 'BrV'
           }
         ]
       },
@@ -78,7 +99,7 @@ gulp.task('umd', () => {
       exports: (file) => {
         return 'exports.default'
       },
-      template: patterns.commonjsStrict.path
+      template: patterns.commonjsStrictGlobal.path
     }))
     .pipe(gulp.dest('dist'))
 })

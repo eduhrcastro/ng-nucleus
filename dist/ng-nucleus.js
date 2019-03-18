@@ -1,12 +1,14 @@
 (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', 'angular'], factory);
+        define(['exports', 'angular', 'moment', 'validator', 'BrV'], function (exports, angular, moment, validator, BrV) {
+            factory((root.ngNucleus = exports), angular, moment, validator, BrV);
+        });
     } else if (typeof exports === 'object') {
-        factory(exports, require('angular'));
+        factory(exports, require('angular'), require('moment.js'), require('validator.js'), require('br-validations.js'));
     } else {
-        factory((root.ngNucleus = {}), root.angular);
+        factory((root.ngNucleus = {}), root.angular, root.moment, root.validator, root.BrV);
     }
-}(this, function (exports, angular) {
+}(this, function (exports, angular, moment, validator, BrV) {
 'use strict';
 
 var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -81,7 +83,26 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 'use strict';
 
 (function () {
-  angular.module('ngNucleus').factory('Validations', ['$window', function ($window) {
+  angular.module('ngNucleus').directive('uiUpperCase', [function () {
+    return {
+      require: 'ngModel',
+      scope: {
+        ngModel: '=ngModel'
+      },
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        scope.$watch('ngModel', function (value) {
+          if (value) {
+            scope.ngModel = value.toString().toUpperCase();
+          }
+        });
+      }
+    };
+  }]);
+})();
+'use strict';
+
+(function () {
+  angular.module('ngNucleus').factory('Validations', ['moment', 'validator', 'BrV', function (moment, validator, BrV) {
     var stringDefault = function stringDefault(string) {
       string = string.replace(new RegExp('[ÁÀÂÃ]', 'gi'), 'a');
       string = string.replace(new RegExp('[ÉÈÊ]', 'gi'), 'e');
@@ -104,10 +125,10 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         return !value.toString().trim().match(/[^a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-+$]/g);
       },
       isUrl: function isUrl(value) {
-        return $window.validator.isURL(value);
+        return validator.isURL(value);
       },
       isCpf: function isCpf(value) {
-        return $window.BrV.cpf.validate(value);
+        return BrV.cpf.validate(value);
       },
       isRg: function isRg(value) {
         return value.toString().trim().match(/([0-9])/g) && value.length > 0 && value.length < 16;
@@ -180,19 +201,19 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
         return value.toString().trim().length === 8;
       },
       isBrPhoneNumber: function isBrPhoneNumber(value) {
-        return $window.validator.isMobilePhone(value, ['pt-BR']);
+        return validator.isMobilePhone(value, ['pt-BR']);
       },
       isEmail: function isEmail(value) {
-        return $window.validator.isEmail(value);
+        return validator.isEmail(value);
       },
       isCnpj: function isCnpj(value) {
-        return $window.BrV.cnpj.validate(value);
+        return BrV.cnpj.validate(value);
       },
       isIe: function isIe(value, state) {
-        return $window.BrV.ie(state).validate(value);
+        return BrV.ie(state).validate(value);
       },
       isPis: function isPis(value) {
-        return $window.BrV.pis.validate(value);
+        return BrV.pis.validate(value);
       },
       isBrBoletoBancario: function isBrBoletoBancario(value) {
         return value.length === 47;
@@ -236,25 +257,6 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       },
       isPosition: function isPosition(value) {
         return true;
-      }
-    };
-  }]);
-})();
-'use strict';
-
-(function () {
-  angular.module('ngNucleus').directive('uiUpperCase', [function () {
-    return {
-      require: 'ngModel',
-      scope: {
-        ngModel: '=ngModel'
-      },
-      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
-        scope.$watch('ngModel', function (value) {
-          if (value) {
-            scope.ngModel = value.toString().toUpperCase();
-          }
-        });
       }
     };
   }]);
