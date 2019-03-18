@@ -14,7 +14,7 @@ var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbo
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = angular.module('ngNucleus', ['angularMoment']);
+exports.default = angular.module('ngNucleus', []);
 'use strict';
 
 var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
@@ -97,7 +97,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 'use strict';
 
 (function () {
-  angular.module('ngNucleus').factory('Validations', ['$window', 'moment', function ($window, moment) {
+  angular.module('ngNucleus').factory('Validations', ['$window', function ($window) {
     var stringDefault = function stringDefault(string) {
       string = string.replace(new RegExp('[ÁÀÂÃ]', 'gi'), 'a');
       string = string.replace(new RegExp('[ÉÈÊ]', 'gi'), 'e');
