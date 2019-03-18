@@ -102,7 +102,7 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
 'use strict';
 
 (function () {
-  angular.module('ngNucleus').factory('Validations', ['moment', 'validator', 'BrV', function (moment, validator, BrV) {
+  angular.module('ngNucleus').factory('Validations', [function () {
     var stringDefault = function stringDefault(string) {
       string = string.replace(new RegExp('[ÁÀÂÃ]', 'gi'), 'a');
       string = string.replace(new RegExp('[ÉÈÊ]', 'gi'), 'e');
