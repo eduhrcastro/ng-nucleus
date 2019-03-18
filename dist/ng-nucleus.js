@@ -4,7 +4,7 @@
             factory((root.ngNucleus = exports), angular, moment, validator, BrV);
         });
     } else if (typeof exports === 'object') {
-        factory(exports, require('angular'), require('moment.js'), require('validator.js'), require('br-validations.js'));
+        factory(exports, require('angular'), require('angular-moment.js'), require('validator.js'), require('br-validations.js'));
     } else {
         factory((root.ngNucleus = {}), root.angular, root.moment, root.validator, root.BrV);
     }
@@ -17,88 +17,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = angular.module('ngNucleus', []);
-'use strict';
-
-var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-  return typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
-} : function (obj) {
-  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
-};
-
-(function () {
-  angular.module('ngNucleus').directive('uiTitulo', ['$log', 'Validations', function ($log, Validations) {
-    return {
-      require: 'ngModel',
-      scope: {
-        ngModel: '=ngModel'
-      },
-      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
-        var clearValue = function clearValue(rawValue) {
-          return rawValue.toString().replace(/[^0-9]/g, '').slice(0, 12);
-        };
-
-        var format = function format(cleanValue) {
-          return cleanValue.trim().replace(/[^0-9]$/, '');
-        };
-
-        var validations = function validations(value) {
-          $log.log(value);
-          $log.log(Validations.isTitulo(value));
-          $log.log(Validations.isBrPhoneNumber('5585996592604'));
-          return Validations.isTitulo(value);
-        };
-
-        ngModelCtrl.$formatters.push(function formatter(value) {
-          if (ngModelCtrl.$isEmpty(value)) {
-            return value;
-          }
-          var cleanValue = clearValue(value.toString());
-          return format(cleanValue);
-        });
-
-        ngModelCtrl.$parsers.push(function parser(value) {
-          ngModelCtrl.$setValidity('titulo', true);
-          if (ngModelCtrl.$isEmpty(value)) {
-            return value;
-          }
-          var cleanValue = clearValue(value.toString());
-          var formattedValue = format(cleanValue);
-          if (!validations(cleanValue)) {
-            ngModelCtrl.$setValidity('titulo', false);
-          }
-          if (ngModelCtrl.$viewValue !== formattedValue) {
-            ngModelCtrl.$setViewValue(formattedValue);
-            ngModelCtrl.$render();
-          }
-          if (angular.isUndefined(ngModelCtrl.getModelValue)) {
-            return cleanValue;
-          }
-          var actualModelType = _typeof(ngModelCtrl.$modelValue);
-          return ngModelCtrl.getModelValue(formattedValue, actualModelType);
-        });
-      }
-    };
-  }]);
-})();
-'use strict';
-
-(function () {
-  angular.module('ngNucleus').directive('uiUpperCase', [function () {
-    return {
-      require: 'ngModel',
-      scope: {
-        ngModel: '=ngModel'
-      },
-      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
-        scope.$watch('ngModel', function (value) {
-          if (value) {
-            scope.ngModel = value.toString().toUpperCase();
-          }
-        });
-      }
-    };
-  }]);
-})();
 'use strict';
 
 (function () {
@@ -257,6 +175,88 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
       },
       isPosition: function isPosition(value) {
         return true;
+      }
+    };
+  }]);
+})();
+'use strict';
+
+var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+  return typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
+};
+
+(function () {
+  angular.module('ngNucleus').directive('uiTitulo', ['$log', 'Validations', function ($log, Validations) {
+    return {
+      require: 'ngModel',
+      scope: {
+        ngModel: '=ngModel'
+      },
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        var clearValue = function clearValue(rawValue) {
+          return rawValue.toString().replace(/[^0-9]/g, '').slice(0, 12);
+        };
+
+        var format = function format(cleanValue) {
+          return cleanValue.trim().replace(/[^0-9]$/, '');
+        };
+
+        var validations = function validations(value) {
+          $log.log(value);
+          $log.log(Validations.isTitulo(value));
+          $log.log(Validations.isBrPhoneNumber('5585996592604'));
+          return Validations.isTitulo(value);
+        };
+
+        ngModelCtrl.$formatters.push(function formatter(value) {
+          if (ngModelCtrl.$isEmpty(value)) {
+            return value;
+          }
+          var cleanValue = clearValue(value.toString());
+          return format(cleanValue);
+        });
+
+        ngModelCtrl.$parsers.push(function parser(value) {
+          ngModelCtrl.$setValidity('titulo', true);
+          if (ngModelCtrl.$isEmpty(value)) {
+            return value;
+          }
+          var cleanValue = clearValue(value.toString());
+          var formattedValue = format(cleanValue);
+          if (!validations(cleanValue)) {
+            ngModelCtrl.$setValidity('titulo', false);
+          }
+          if (ngModelCtrl.$viewValue !== formattedValue) {
+            ngModelCtrl.$setViewValue(formattedValue);
+            ngModelCtrl.$render();
+          }
+          if (angular.isUndefined(ngModelCtrl.getModelValue)) {
+            return cleanValue;
+          }
+          var actualModelType = _typeof(ngModelCtrl.$modelValue);
+          return ngModelCtrl.getModelValue(formattedValue, actualModelType);
+        });
+      }
+    };
+  }]);
+})();
+'use strict';
+
+(function () {
+  angular.module('ngNucleus').directive('uiUpperCase', [function () {
+    return {
+      require: 'ngModel',
+      scope: {
+        ngModel: '=ngModel'
+      },
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        scope.$watch('ngModel', function (value) {
+          if (value) {
+            scope.ngModel = value.toString().toUpperCase();
+          }
+        });
       }
     };
   }]);

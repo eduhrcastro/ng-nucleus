@@ -73,7 +73,7 @@ gulp.task('umd', () => {
           {
             name: 'moment',
             amd: 'moment',
-            cjs: 'moment.js',
+            cjs: 'angular-moment.js',
             global: 'moment',
             param: 'moment'
           },
