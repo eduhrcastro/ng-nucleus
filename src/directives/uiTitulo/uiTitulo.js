@@ -12,20 +12,12 @@
           }
 
           const format = cleanValue => {
-            return cleanValue.trim().replace(/[^0-9]$/, '')
+            return cleanValue.trim()
           }
 
           const validations = value => {
             return Validations.isTitulo(value)
           }
-
-          ngModelCtrl.$formatters.push(value => {
-            if (ngModelCtrl.$isEmpty(value)) {
-              return value
-            }
-            let cleanValue = clearValue(value.toString())
-            return format(cleanValue)
-          })
 
           ngModelCtrl.$parsers.push(value => {
             ngModelCtrl.$setValidity('titulo', true)
@@ -40,11 +32,10 @@
               ngModelCtrl.$setViewValue(formattedValue)
               ngModelCtrl.$render()
             }
-            if (angular.isUndefined(ngModelCtrl.getModelValue)) {
+            if (angular.isUndefined(ngModelCtrl.$viewValue)) {
               return cleanValue
             }
-            let actualModelType = typeof ngModelCtrl.$modelValue
-            return ngModelCtrl.getModelValue(formattedValue, actualModelType)
+            return formattedValue
           })
         }
       }

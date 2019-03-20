@@ -56,9 +56,6 @@ gulp.task('clean', () => {
 
 gulp.task('umd', () => {
   return gulp.src('tmp/*.js')
-    .pipe(babel({
-      presets: ['@babel/preset-env']
-    }))
     .pipe(umd({
       dependencies: file => {
         return [

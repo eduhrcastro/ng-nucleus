@@ -9,8 +9,6 @@
 }(this, function (exports, angular, moment, validator, BrV) {
 "use strict";
 
-function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -38,14 +36,21 @@ exports.default = _default;
 "use strict";
 
 (function () {
-  angular.module('ngNucleus').directive('uiNumberOnlyMask', [function () {
+  angular.module('ngNucleus').directive('uiNumberIntegerOnly', [function () {
     return {
       require: 'ngModel',
       link: function link(scope, iElement, iAttrs, ngModelCtrl) {
         ngModelCtrl.$parsers.push(function (value) {
           ngModelCtrl.$setValidity('min', true);
           ngModelCtrl.$setValidity('max', true);
-          var input = value.toString().replace(/[^0-9]/g, '');
+          ngModelCtrl.$setValidity('integer', true);
+          var input = value.toString().replace(/[^0-9.-]/g, '');
+
+          if (!Number.isInteger(Number(input))) {
+            ngModelCtrl.$setValidity('integer', false);
+          } else {
+            input = input.replace('.', '');
+          }
 
           if (angular.isDefined(iAttrs.numberMin) && parseInt(input) < parseInt(iAttrs.numberMin)) {
             ngModelCtrl.$setValidity('min', false);
@@ -58,28 +63,101 @@ exports.default = _default;
             ngModelCtrl.$render();
           }
 
-          return Number(input);
+          return Math.trunc(Number(input));
         });
       }
     };
   }]);
 })();
-
 "use strict";
 
-function _typeof(obj) {
-  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
-    _typeof = function _typeof(obj) {
-      return _typeof2(obj);
-    };
-  } else {
-    _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
-    };
-  }
+(function () {
+  angular.module('ngNucleus').directive('uiScientificNotation', [function () {
+    return {
+      require: 'ngModel',
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        var clearValue = function clearValue(rawValue) {
+          return rawValue.toString().replace(/[^0-9.-]/g, '');
+        };
 
-  return _typeof(obj);
-}
+        var validations = function validations(value) {
+          if (angular.isDefined(iAttrs.min) && parseFloat(value) < parseFloat(iAttrs.min)) {
+            return false;
+          } else if (angular.isDefined(iAttrs.max) && parseFloat(value) > parseFloat(iAttrs.max)) {
+            return false;
+          }
+
+          return angular.isDefined(value) && value !== '' && !isNaN(value);
+        };
+
+        var format = function format(value) {
+          if (value === '') {
+            return value;
+          }
+
+          return Number(value).toString();
+        };
+
+        ngModelCtrl.$formatters.push(function (value) {
+          if (ngModelCtrl.$isEmpty(value)) {
+            return value;
+          }
+
+          var cleanValue = clearValue(value);
+          return format(cleanValue);
+        });
+        ngModelCtrl.$parsers.push(function (value) {
+          ngModelCtrl.$setValidity('notation', true);
+
+          if (ngModelCtrl.$isEmpty(value)) {
+            ngModelCtrl.$setValidity('notation', false);
+            return value;
+          }
+
+          var cleanValue = clearValue(value);
+          var formattedValue = format(cleanValue);
+
+          if (!validations(cleanValue)) {
+            ngModelCtrl.$setValidity('notation', false);
+          }
+
+          if (ngModelCtrl.$viewValue !== formattedValue) {
+            ngModelCtrl.$setViewValue(formattedValue);
+            ngModelCtrl.$render();
+          }
+
+          if (angular.isUndefined(ngModelCtrl.$viewValue)) {
+            return cleanValue;
+          }
+
+          return formattedValue;
+        });
+      }
+    };
+  }]);
+})();
+"use strict";
+
+(function () {
+  angular.module('ngNucleus').directive('uiStringOnlyMask', [function () {
+    return {
+      require: 'ngModel',
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        ngModelCtrl.$parsers.push(function (value) {
+          var input = value.toString().replace(/[^a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-+$]/g, '');
+
+          if (input !== value.toString()) {
+            ngModelCtrl.$setViewValue(input);
+            ngModelCtrl.$render();
+          }
+
+          return String(input);
+        });
+      }
+    };
+  }]);
+})();
+"use strict";
 
 (function () {
   angular.module('ngNucleus').directive('uiTitulo', ['Validations', function (Validations) {
@@ -91,7 +169,7 @@ function _typeof(obj) {
         };
 
         var format = function format(cleanValue) {
-          return cleanValue.trim().replace(/[^0-9]$/, '');
+          return cleanValue.trim();
         };
 
         var validations = function validations(value) {
@@ -126,41 +204,16 @@ function _typeof(obj) {
             ngModelCtrl.$render();
           }
 
-          if (angular.isUndefined(ngModelCtrl.getModelValue)) {
+          if (angular.isUndefined(ngModelCtrl.$viewValue)) {
             return cleanValue;
           }
 
-          var actualModelType = _typeof(ngModelCtrl.$modelValue);
-
-          return ngModelCtrl.getModelValue(formattedValue, actualModelType);
+          return formattedValue;
         });
       }
     };
   }]);
 })();
-
-"use strict";
-
-(function () {
-  angular.module('ngNucleus').directive('uiStringOnlyMask', [function () {
-    return {
-      require: 'ngModel',
-      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
-        ngModelCtrl.$parsers.push(function (value) {
-          var input = value.toString().replace(/[^a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-+$]/g, '');
-
-          if (input !== value.toString()) {
-            ngModelCtrl.$setViewValue(input);
-            ngModelCtrl.$render();
-          }
-
-          return String(input);
-        });
-      }
-    };
-  }]);
-})();
-
 "use strict";
 
 (function () {
@@ -175,7 +228,6 @@ function _typeof(obj) {
     };
   }]);
 })();
-
 "use strict";
 
 (function () {
