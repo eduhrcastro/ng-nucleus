@@ -38,19 +38,27 @@ exports.default = _default;
 "use strict";
 
 (function () {
-  angular.module('ngNucleus').directive('uiStringOnlyMask', [function () {
+  angular.module('ngNucleus').directive('uiNumberOnlyMask', [function () {
     return {
       require: 'ngModel',
       link: function link(scope, iElement, iAttrs, ngModelCtrl) {
         ngModelCtrl.$parsers.push(function (value) {
-          var input = value.toString().replace(/[^a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-+$]/g, '');
+          ngModelCtrl.$setValidity('min', true);
+          ngModelCtrl.$setValidity('max', true);
+          var input = value.toString().replace(/[^0-9]/g, '');
 
-          if (input !== value) {
+          if (angular.isDefined(iAttrs.numberMin) && parseInt(input) < parseInt(iAttrs.numberMin)) {
+            ngModelCtrl.$setValidity('min', false);
+          } else if (angular.isDefined(iAttrs.numberMax) && parseInt(input) > parseInt(iAttrs.numberMax)) {
+            ngModelCtrl.$setValidity('max', false);
+          }
+
+          if (input !== value.toString()) {
             ngModelCtrl.$setViewValue(input);
             ngModelCtrl.$render();
           }
 
-          return String(input);
+          return Number(input);
         });
       }
     };
@@ -125,6 +133,28 @@ function _typeof(obj) {
           var actualModelType = _typeof(ngModelCtrl.$modelValue);
 
           return ngModelCtrl.getModelValue(formattedValue, actualModelType);
+        });
+      }
+    };
+  }]);
+})();
+
+"use strict";
+
+(function () {
+  angular.module('ngNucleus').directive('uiStringOnlyMask', [function () {
+    return {
+      require: 'ngModel',
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        ngModelCtrl.$parsers.push(function (value) {
+          var input = value.toString().replace(/[^a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-+$]/g, '');
+
+          if (input !== value.toString()) {
+            ngModelCtrl.$setViewValue(input);
+            ngModelCtrl.$render();
+          }
+
+          return String(input);
         });
       }
     };
