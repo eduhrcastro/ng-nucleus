@@ -148,7 +148,8 @@ gulp.task('build', gulp.series(
   'clean',
   'sassLint',
   'htmlhint',
-  'eslint'
+  'eslint',
+  'test'
 ))
 
 gulp.task('default', gulp.series('watch'))
