@@ -26,6 +26,7 @@ module.exports = function (config) {
       'node_modules/@babel/polyfill/dist/polyfill.js',
       'node_modules/jquery/dist/jquery.min.js',
       'node_modules/angular/angular.js',
+      'node_modules/angular-locale-pt-br/angular-locale_pt-br.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'node_modules/moment/min/moment-with-locales.min.js',
       'node_modules/angular-moment/angular-moment.min.js',

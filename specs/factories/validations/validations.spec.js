@@ -125,5 +125,119 @@
         expect(Validations.isInscricaoMunicipal('3')).toBe(true)
       })
     })
+
+    describe('isNumber', () => {
+      it('should exist', () => {
+        expect(Validations.isNumber).toBeDefined()
+      })
+
+      it('should return true to number 4', () => {
+        expect(Validations.isNumber(4)).toBe(true)
+      })
+
+      it('should return true to number "4"', () => {
+        expect(Validations.isNumber('4')).toBe(true)
+      })
+
+      it('should return true to number -6', () => {
+        expect(Validations.isNumber(-6)).toBe(true)
+      })
+
+      it('should return true to number -6', () => {
+        expect(Validations.isNumber('-6')).toBe(true)
+      })
+
+      it('should return true to number -6.5', () => {
+        expect(Validations.isNumber('-6.5')).toBe(true)
+      })
+
+      it('should return true to number -6.5', () => {
+        expect(Validations.isNumber(-6.5)).toBe(true)
+      })
+
+      it('should return true to number 5.6', () => {
+        expect(Validations.isNumber(5.6)).toBe(true)
+      })
+
+      it('should return false to number 3.29%', () => {
+        expect(Validations.isNumber('3.29%')).toBe(false)
+      })
+
+      it('should return false to number abc#4', () => {
+        expect(Validations.isNumber('abc#4')).toBe(false)
+      })
+
+      it('should return false to number 6.3.2', () => {
+        expect(Validations.isNumber('6.3.2')).toBe(false)
+      })
+    })
+
+    describe('isISODateString', () => {
+      it('should exist', () => {
+        expect(Validations.isISODateString).toBeDefined()
+      })
+
+      it('should return true to iso date 2019-03-20T17:31:16.237Z', () => {
+        expect(Validations.isISODateString('2019-03-20T17:31:16.237Z')).toBe(true)
+      })
+
+      it('should return true to iso date 2019-03-20', () => {
+        expect(Validations.isISODateString('2019-03-20')).toBe(false)
+      })
+
+      it('should return true to iso date 1553103277', () => {
+        expect(Validations.isISODateString('1553103277')).toBe(false)
+      })
+
+      it('should return true to iso date 2019-03-20T17:34:37+0000', () => {
+        expect(Validations.isISODateString('2019-03-20T17:34:37+0000')).toBe(false)
+      })
+
+      it('should return true to iso date Wed, 20 Mar 19 17:34:37 +0000', () => {
+        expect(Validations.isISODateString('Wed, 20 Mar 19 17:34:37 +0000')).toBe(false)
+      })
+
+      it('should return true to iso date 2019-03-20T17:34:37+00:00', () => {
+        expect(Validations.isISODateString('2019-03-20T17:34:37+00:00')).toBe(false)
+      })
+    })
+
+    describe('isDate', () => {
+      it('should exist', () => {
+        expect(Validations.isDate).toBeDefined()
+      })
+
+      it('should return true to date 2019-03-20T17:31:16.237Z', () => {
+        expect(Validations.isDate('2019-03-20T17:31:16.237Z')).toBe(true)
+      })
+
+      it('should return true to date 2019-03-20', () => {
+        expect(Validations.isDate('2019-03-20')).toBe(true)
+      })
+
+      it('should return true to date 20/03/2019', () => {
+        expect(Validations.isDate('20/03/2019', 'DD/MM/YYYY')).toBe(true)
+      })
+
+      it('should return true to date 2019-03-20', () => {
+        expect(Validations.isDate(20190320)).toBe(true)
+      })
+
+      it('should return true to date 1553103277', () => {
+        expect(Validations.isDate('1553103277')).toBe(false)
+      })
+
+      it('should return true to date 2019-03-20T17:34:37+0000', () => {
+        expect(Validations.isDate('2019-03-20T17:34:37+0000')).toBe(true)
+      })
+
+      it('should return true to date Wed, 20 Mar 19 17:34:37 +0000', () => {
+        expect(Validations.isDate('Wed, 20 Mar 19 17:34:37 +0000')).toBe(true)
+      })
+
+      it('should return true to date 2019-03-20T17:34:37+00:00', () => {
+        expect(Validations.isDate('2019-03-20T17:34:37+00:00')).toBe(true)
+      })
+    })
   })
 })()

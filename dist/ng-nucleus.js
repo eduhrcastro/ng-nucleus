@@ -40,6 +40,154 @@ exports.default = _default;
 "use strict";
 
 (function () {
+  angular.module('ngNucleus').directive('uiDate', ['$locale', 'Validations', function ($locale, Validations) {
+    return {
+      require: 'ngModel',
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        var dateFormatMapByLocale = {
+          'pt-br': 'DD/MM/YYYY',
+          'es-ar': 'DD/MM/YYYY',
+          'es-mx': 'DD/MM/YYYY',
+          'es': 'DD/MM/YYYY',
+          'en-us': 'MM/DD/YYYY',
+          'en': 'MM/DD/YYYY',
+          'fr-fr': 'DD/MM/YYYY',
+          'fr': 'DD/MM/YYYY',
+          'ru': 'DD.MM.YYYY'
+        };
+        var dateFormat = dateFormatMapByLocale[$locale.id] || 'YYYY-MM-DD';
+        iAttrs.parse = iAttrs.parse || 'true';
+        dateFormat = iAttrs.uiDateMask || dateFormat;
+
+        var clearValue = function clearValue(rawValue) {
+          if (angular.isObject(rawValue) || Validations.isISODateString(rawValue)) {
+            return moment(rawValue).format(dateFormat);
+          }
+
+          rawValue = rawValue.toString().replace(/[^0-9]/g, '').trim();
+          return moment(rawValue, dateFormat.replace('/', '')).format(dateFormat);
+        };
+
+        var validations = function validations(value) {
+          return !ngModelCtrl.$isEmpty(value) && Validations.isDate(value, dateFormat);
+        };
+
+        ngModelCtrl.$parsers.push(function (value) {
+          ngModelCtrl.$setValidity('date', true);
+
+          if (ngModelCtrl.$isEmpty(value)) {
+            ngModelCtrl.$setValidity('date', false);
+            return value;
+          }
+
+          var formattedValue = clearValue(value);
+
+          if (!validations(formattedValue)) {
+            ngModelCtrl.$setValidity('date', false);
+          }
+
+          if (ngModelCtrl.$viewValue !== formattedValue) {
+            ngModelCtrl.$setViewValue(formattedValue);
+            ngModelCtrl.$render();
+          }
+
+          if (angular.isUndefined(ngModelCtrl.$viewValue)) {
+            return formattedValue;
+          }
+
+          return iAttrs.parse === 'false' ? formattedValue : moment(formattedValue).format(dateFormat);
+        });
+      }
+    };
+  }]);
+})();
+"use strict";
+
+(function () {
+  angular.module('ngNucleus').directive('uiFinance', ['$locale', 'Validations', function ($locale, Validations) {
+    return {
+      require: 'ngModel',
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        var decimalDelimiter = $locale.NUMBER_FORMATS.DECIMAL_SEP;
+        var thousandsDelimiter = $locale.NUMBER_FORMATS.GROUP_SEP;
+        var currencySym = $locale.NUMBER_FORMATS.CURRENCY_SYM + ' ';
+
+        var clearValue = function clearValue(rawValue) {
+          rawValue = rawValue.toString().replace(/[^0-9.,]/g, '');
+          var integer = rawValue.substr(0, rawValue.indexOf(decimalDelimiter));
+          integer = integer.toString().replace(/[^0-9]/g, '');
+          var floating = rawValue.substr(rawValue.indexOf(decimalDelimiter) - rawValue.length);
+          var cleanValue = integer + floating;
+          var number = cleanValue.toString().replace(decimalDelimiter, thousandsDelimiter);
+
+          if (ngModelCtrl.$isEmpty(number)) {
+            return number;
+          }
+
+          return Number(number).toString();
+        };
+
+        var format = function format(cleanValue) {
+          if (ngModelCtrl.$isEmpty(cleanValue)) {
+            return cleanValue;
+          }
+
+          if (cleanValue.split(thousandsDelimiter).length - 1 === 1) {
+            cleanValue = cleanValue.toString().replace(thousandsDelimiter, decimalDelimiter);
+          }
+
+          var integer = cleanValue.substr(0, cleanValue.indexOf(decimalDelimiter));
+          integer = integer.toString().replace(/\B(?=(\d{3})+(?!\d))/g, thousandsDelimiter);
+          var floating = cleanValue.substr(cleanValue.indexOf(decimalDelimiter) - cleanValue.length);
+
+          if (angular.isDefined(iAttrs.decimals) && parseInt(iAttrs.decimals) > 0) {
+            floating = floating.substr(0, parseInt(iAttrs.decimals) + 1);
+          }
+
+          if (angular.isDefined(iAttrs.currency) && (iAttrs.currency === true || iAttrs.currency)) {
+            return currencySym + integer + floating;
+          }
+
+          return integer + floating;
+        };
+
+        var validations = function validations(value) {
+          return angular.isDefined(value) && value !== '' && Validations.isNumber(value);
+        };
+
+        ngModelCtrl.$parsers.push(function (value) {
+          ngModelCtrl.$setValidity('finance', true);
+
+          if (ngModelCtrl.$isEmpty(value)) {
+            ngModelCtrl.$setValidity('finance', false);
+            return value;
+          }
+
+          var cleanValue = clearValue(value);
+          var formattedValue = format(cleanValue);
+
+          if (!validations(cleanValue)) {
+            ngModelCtrl.$setValidity('finance', false);
+          }
+
+          if (ngModelCtrl.$viewValue !== formattedValue) {
+            ngModelCtrl.$setViewValue(formattedValue);
+            ngModelCtrl.$render();
+          }
+
+          if (angular.isUndefined(ngModelCtrl.$viewValue)) {
+            return cleanValue;
+          }
+
+          return formattedValue;
+        });
+      }
+    };
+  }]);
+})();
+"use strict";
+
+(function () {
   angular.module('ngNucleus').directive('uiInscricaoMunicipal', ['Validations', function (Validations) {
     return {
       require: 'ngModel',
@@ -175,7 +323,7 @@ exports.default = _default;
 "use strict";
 
 (function () {
-  angular.module('ngNucleus').directive('uiScientificNotation', [function () {
+  angular.module('ngNucleus').directive('uiScientificNotation', ['Validations', function (Validations) {
     return {
       require: 'ngModel',
       link: function link(scope, iElement, iAttrs, ngModelCtrl) {
@@ -190,25 +338,17 @@ exports.default = _default;
             return false;
           }
 
-          return angular.isDefined(value) && value !== '' && !isNaN(value);
+          return angular.isDefined(value) && value !== '' && Validations.isNumber(value);
         };
 
         var format = function format(value) {
-          if (value === '') {
+          if (ngModelCtrl.$isEmpty(value)) {
             return value;
           }
 
           return Number(value).toString();
         };
 
-        ngModelCtrl.$formatters.push(function (value) {
-          if (ngModelCtrl.$isEmpty(value)) {
-            return value;
-          }
-
-          var cleanValue = clearValue(value);
-          return format(cleanValue);
-        });
         ngModelCtrl.$parsers.push(function (value) {
           ngModelCtrl.$setValidity('notation', true);
 
@@ -328,6 +468,19 @@ exports.default = _default;
 (function () {
   angular.module('ngNucleus').factory('Validations', ['$window', function ($window) {
     return {
+      isDate: function isDate(value, dateFormat) {
+        if (angular.isUndefined(dateFormat) || dateFormat === '') {
+          return moment(value).isValid();
+        }
+
+        return moment(value, dateFormat).isValid() && value.length === dateFormat.length;
+      },
+      isISODateString: function isISODateString(value) {
+        return /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}([-+][0-9]{2}:[0-9]{2}|Z)$/.test(value.toString());
+      },
+      isNumber: function isNumber(value) {
+        return !isNaN(value);
+      },
       isInscricaoMunicipal: function isInscricaoMunicipal(value) {
         var invalidIM = ['0', '000000000000000', '111111111111111', '222222222222222', '333333333333333', '444444444444444', '555555555555555', '666666666666666', '777777777777777', '888888888888888', '999999999999999'];
         return !isNaN(value) && !invalidIM.includes(value.toString()) && value.toString().length > 0 && value.toString().length < 16;

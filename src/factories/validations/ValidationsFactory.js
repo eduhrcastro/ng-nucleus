@@ -5,6 +5,17 @@
       $window
     ) => {
       return {
+        isDate: (value, dateFormat) => {
+          if (angular.isUndefined(dateFormat) || dateFormat === '') { return moment(value).isValid() }
+          return moment(value, dateFormat).isValid() && value.length === dateFormat.length
+        },
+        isISODateString: value => {
+          return /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}([-+][0-9]{2}:[0-9]{2}|Z)$/
+            .test(value.toString())
+        },
+        isNumber: value => {
+          return !isNaN(value)
+        },
         isInscricaoMunicipal: value => {
           const invalidIM = [
             '0',
