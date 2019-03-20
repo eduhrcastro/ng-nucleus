@@ -48,7 +48,7 @@
   },
   "overrides": [
     {
-      "files": ["dist/**/*.js", "specs/**/*.js"],
+      "files": ["dist/**/*.js", "specs/**/*.js", "gulpfile.babel.js"],
       "rules": {
         "angular/avoid-scope-typos": 0,
         "angular/module-getter": 0,

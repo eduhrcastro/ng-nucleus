@@ -23,6 +23,7 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'node_modules/@babel/polyfill/dist/polyfill.js',
       'node_modules/jquery/dist/jquery.min.js',
       'node_modules/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
@@ -47,7 +48,7 @@ module.exports = function (config) {
 
     babelPreprocessor: {
       options: {
-        presets: ['es2015'],
+        presets: ['@babel/preset-env'],
         sourceMap: 'inline'
       },
       filename: function (file) {

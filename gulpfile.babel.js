@@ -2,13 +2,13 @@
 
 import gulp from 'gulp'
 import babel from 'gulp-babel'
-import runSequence from 'gulp-run-sequence'
-import rename from 'gulp-rename'
 
 import yarn from 'gulp-yarn'
+
+import rename from 'gulp-rename'
+import concat from 'gulp-concat'
 import minify from 'gulp-babel-minify'
 import clean from 'gulp-clean'
-import concat from 'gulp-concat'
 import umd from 'gulp-umd'
 
 import eslint from 'gulp-eslint'
@@ -17,7 +17,6 @@ import htmlhint from 'gulp-htmlhint'
 
 import patterns from 'umd-templates'
 import karma from 'karma'
-
 import path from 'path'
 
 const karmaServer = karma.Server
@@ -32,7 +31,7 @@ gulp.task('yarn', () => {
 gulp.task('concat', () => {
   return gulp.src(['src/**/*.js'])
     .pipe(babel({
-      presets: ['es2015']
+      presets: ['@babel/preset-env']
     }))
     .pipe(concat({
       newLine: ';',
@@ -58,10 +57,10 @@ gulp.task('clean', () => {
 gulp.task('umd', () => {
   return gulp.src('tmp/*.js')
     .pipe(babel({
-      presets: ['es2015']
+      presets: ['@babel/preset-env']
     }))
     .pipe(umd({
-      dependencies: (file) => {
+      dependencies: file => {
         return [
           {
             name: 'angular',
@@ -93,10 +92,10 @@ gulp.task('umd', () => {
           }
         ]
       },
-      namespace: (file) => {
+      namespace: file => {
         return projectName
       },
-      exports: (file) => {
+      exports: file => {
         return 'exports.default'
       },
       template: patterns.commonjsStrict.path
@@ -104,45 +103,52 @@ gulp.task('umd', () => {
     .pipe(gulp.dest('dist'))
 })
 
-gulp.task('watch', () => {
-  gulp.watch('gulpfile.babel.js', () => {
-    runSequence('yarn', 'concat', 'umd', 'minify')
-  })
-  gulp.watch(['src/**/*.js'], () => {
-    runSequence('yarn', 'concat', 'umd', 'minify')
-  })
-})
-
-gulp.task('test', (done) => {
-  karmaServer.start({
-    configFile: path.join(__dirname, '/karma.conf.js'),
-    singleRun: true
-  }, () => { done() })
-})
-
-gulp.task('eslint', (done) => {
+gulp.task('eslint', () => {
   return gulp.src(['src/**/*.js', 'gulpfile.babel.js'])
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError())
 })
 
-gulp.task('sassLint', (done) => {
+gulp.task('sassLint', () => {
   return gulp.src(['src/**/*.scss'])
     .pipe(sassLint())
     .pipe(sassLint.format())
     .pipe(sassLint.failOnError())
 })
 
-gulp.task('htmlhint', (done) => {
+gulp.task('htmlhint', () => {
   return gulp.src(['src/**/*.html'])
     .pipe(htmlhint())
 })
 
-gulp.task('build', () => {
-  runSequence('yarn', 'concat', 'umd', 'minify', 'clean', 'sassLint', 'htmlhint', 'eslint')
+gulp.task('test', done => {
+  karmaServer.start({
+    configFile: path.join(__dirname, '/karma.conf.js'),
+    singleRun: true
+  }, () => { done() })
 })
 
-gulp.task('default', () => {
-  runSequence('yarn', 'concat', 'umd', 'minify', 'watch')
+gulp.task('watch', () => {
+  gulp.watch(['gulpfile.babel.js', 'src/**/*.js'],
+    gulp.series(
+      'yarn',
+      'concat',
+      'umd',
+      'minify'
+    )
+  )
 })
+
+gulp.task('build', gulp.series(
+  'yarn',
+  'concat',
+  'umd',
+  'minify',
+  'clean',
+  'sassLint',
+  'htmlhint',
+  'eslint'
+))
+
+gulp.task('default', gulp.series('watch'))
