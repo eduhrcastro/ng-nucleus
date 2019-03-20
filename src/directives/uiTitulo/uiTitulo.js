@@ -25,7 +25,7 @@
               ngModelCtrl.$setValidity('titulo', false)
               return value
             }
-            let cleanValue = clearValue(value.toString())
+            let cleanValue = clearValue(value)
             let formattedValue = format(cleanValue)
             if (!validations(cleanValue)) { ngModelCtrl.$setValidity('titulo', false) }
             if (ngModelCtrl.$viewValue !== formattedValue) {

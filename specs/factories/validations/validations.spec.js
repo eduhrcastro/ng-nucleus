@@ -59,5 +59,71 @@
         expect(Validations.isPis(12037810867)).toBe(true)
       })
     })
+
+    describe('isInscricaoMunicipal', () => {
+      it('should exist', () => {
+        expect(Validations.isInscricaoMunicipal).toBeDefined()
+      })
+
+      it('should return false to municipal registration equals 000000000000000', () => {
+        expect(Validations.isInscricaoMunicipal('000000000000000')).toBe(false)
+      })
+
+      it('should return false to municipal registration equals 111111111111111', () => {
+        expect(Validations.isInscricaoMunicipal('111111111111111')).toBe(false)
+      })
+
+      it('should return false to municipal registration equals 222222222222222', () => {
+        expect(Validations.isInscricaoMunicipal(222222222222222)).toBe(false)
+      })
+
+      it('should return false to municipal registration equals 333333333333333', () => {
+        expect(Validations.isInscricaoMunicipal('333333333333333')).toBe(false)
+      })
+
+      it('should return false to municipal registration equals 444444444444444', () => {
+        expect(Validations.isInscricaoMunicipal('444444444444444')).toBe(false)
+      })
+
+      it('should return false to municipal registration equals 555555555555555', () => {
+        expect(Validations.isInscricaoMunicipal(555555555555555)).toBe(false)
+      })
+
+      it('should return false to municipal registration equals 666666666666666', () => {
+        expect(Validations.isInscricaoMunicipal('666666666666666')).toBe(false)
+      })
+
+      it('should return false to municipal registration equals 777777777777777', () => {
+        expect(Validations.isInscricaoMunicipal('777777777777777')).toBe(false)
+      })
+
+      it('should return false to municipal registration equals 888888888888888', () => {
+        expect(Validations.isInscricaoMunicipal(888888888888888)).toBe(false)
+      })
+
+      it('should return false to municipal registration equals 999999999999999', () => {
+        expect(Validations.isInscricaoMunicipal('999999999999999')).toBe(false)
+      })
+
+      it('should return false to municipal registration equals 9878971231231239989898908123899', () => {
+        expect(Validations.isInscricaoMunicipal(9878971231231239989898908123899)).toBe(false)
+      })
+
+      it('should return false to municipal registration equals ""', () => {
+        expect(Validations.isInscricaoMunicipal('')).toBe(false)
+      })
+
+      it('should return false to municipal registration equals abc', () => {
+        expect(Validations.isInscricaoMunicipal('abc')).toBe(false)
+      })
+
+      it('should return false to municipal registration equals 234231232434', () => {
+        expect(Validations.isInscricaoMunicipal(234231232434)).toBe(true)
+      })
+
+      it('should return false to municipal registration equals 3', () => {
+        expect(Validations.isInscricaoMunicipal('3')).toBe(true)
+      })
+    })
   })
 })()

@@ -5,6 +5,22 @@
       $window
     ) => {
       return {
+        isInscricaoMunicipal: value => {
+          const invalidIM = [
+            '0',
+            '000000000000000',
+            '111111111111111',
+            '222222222222222',
+            '333333333333333',
+            '444444444444444',
+            '555555555555555',
+            '666666666666666',
+            '777777777777777',
+            '888888888888888',
+            '999999999999999'
+          ]
+          return !isNaN(value) && !invalidIM.includes(value.toString()) && value.toString().length > 0 && value.toString().length < 16
+        },
         isPis: value => {
           return value.toString().length > 10 && value.toString().length < 15 && $window.BrV.pis.validate(value.toString())
         },

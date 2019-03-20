@@ -40,6 +40,55 @@ exports.default = _default;
 "use strict";
 
 (function () {
+  angular.module('ngNucleus').directive('uiInscricaoMunicipal', ['Validations', function (Validations) {
+    return {
+      require: 'ngModel',
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        var clearValue = function clearValue(rawValue) {
+          return Number(rawValue.toString().replace(/[^0-9]/g, '').slice(0, 15)).toString();
+        };
+
+        var format = function format(cleanValue) {
+          return cleanValue.trim();
+        };
+
+        var validations = function validations(value) {
+          return Validations.isInscricaoMunicipal(value);
+        };
+
+        ngModelCtrl.$parsers.push(function (value) {
+          ngModelCtrl.$setValidity('inscricaoMunicipal', true);
+
+          if (ngModelCtrl.$isEmpty(value)) {
+            ngModelCtrl.$setValidity('inscricaoMunicipal', false);
+            return value;
+          }
+
+          var cleanValue = clearValue(value);
+          var formattedValue = format(cleanValue);
+
+          if (!validations(cleanValue)) {
+            ngModelCtrl.$setValidity('inscricaoMunicipal', false);
+          }
+
+          if (ngModelCtrl.$viewValue !== formattedValue) {
+            ngModelCtrl.$setViewValue(formattedValue);
+            ngModelCtrl.$render();
+          }
+
+          if (angular.isUndefined(ngModelCtrl.$viewValue)) {
+            return cleanValue;
+          }
+
+          return formattedValue;
+        });
+      }
+    };
+  }]);
+})();
+"use strict";
+
+(function () {
   angular.module('ngNucleus').directive('uiNumberIntegerOnly', [function () {
     return {
       require: 'ngModel',
@@ -101,7 +150,7 @@ exports.default = _default;
             return value;
           }
 
-          var cleanValue = clearValue(value.toString());
+          var cleanValue = clearValue(value);
           var formattedValue = format(cleanValue);
 
           if (!validations(cleanValue)) {
@@ -238,7 +287,7 @@ exports.default = _default;
             return value;
           }
 
-          var cleanValue = clearValue(value.toString());
+          var cleanValue = clearValue(value);
           var formattedValue = format(cleanValue);
 
           if (!validations(cleanValue)) {
@@ -279,6 +328,10 @@ exports.default = _default;
 (function () {
   angular.module('ngNucleus').factory('Validations', ['$window', function ($window) {
     return {
+      isInscricaoMunicipal: function isInscricaoMunicipal(value) {
+        var invalidIM = ['0', '000000000000000', '111111111111111', '222222222222222', '333333333333333', '444444444444444', '555555555555555', '666666666666666', '777777777777777', '888888888888888', '999999999999999'];
+        return !isNaN(value) && !invalidIM.includes(value.toString()) && value.toString().length > 0 && value.toString().length < 16;
+      },
       isPis: function isPis(value) {
         return value.toString().length > 10 && value.toString().length < 15 && $window.BrV.pis.validate(value.toString());
       },

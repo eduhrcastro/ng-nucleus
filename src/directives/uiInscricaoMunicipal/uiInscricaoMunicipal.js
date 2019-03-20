@@ -1,36 +1,33 @@
 (() => {
-  angular.module('ngNucleus').directive('uiPis', [
+  angular.module('ngNucleus').directive('uiInscricaoMunicipal', [
     'Validations',
-    '$window',
     (
-      Validations,
-      $window
+      Validations
     ) => {
       return {
         require: 'ngModel',
         link: (scope, iElement, iAttrs, ngModelCtrl) => {
           const clearValue = rawValue => {
-            return rawValue.toString().replace(/[^0-9]/g, '').slice(0, 11)
+            return Number(rawValue.toString().replace(/[^0-9]/g, '').slice(0, 15)).toString()
           }
 
           const format = cleanValue => {
-            let formattedValue = $window.StringMask.apply(cleanValue, '000.0000.000-0')
-            return formattedValue.trim()
+            return cleanValue.trim()
           }
 
           const validations = value => {
-            return Validations.isPis(value)
+            return Validations.isInscricaoMunicipal(value)
           }
 
           ngModelCtrl.$parsers.push(value => {
-            ngModelCtrl.$setValidity('pis', true)
+            ngModelCtrl.$setValidity('inscricaoMunicipal', true)
             if (ngModelCtrl.$isEmpty(value)) {
-              ngModelCtrl.$setValidity('pis', false)
+              ngModelCtrl.$setValidity('inscricaoMunicipal', false)
               return value
             }
             let cleanValue = clearValue(value)
             let formattedValue = format(cleanValue)
-            if (!validations(cleanValue)) { ngModelCtrl.$setValidity('pis', false) }
+            if (!validations(cleanValue)) { ngModelCtrl.$setValidity('inscricaoMunicipal', false) }
             if (ngModelCtrl.$viewValue !== formattedValue) {
               ngModelCtrl.$setViewValue(formattedValue)
               ngModelCtrl.$render()
