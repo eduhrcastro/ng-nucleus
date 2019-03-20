@@ -10,5 +10,8 @@ if (!angular.isObject(validator) || angular.isUndefined(validator)) {
 if (!angular.isObject(BrV) || angular.isUndefined(BrV)) {
   throw new Error('Br-validations.js cannot be found by ng-nucleus!')
 }
+if (!angular.isFunction(StringMask) || angular.isUndefined(StringMask)) {
+  throw new Error('StringMask cannot be found by ng-nucleus!')
+}
 
 export default angular.module('ngNucleus', [])

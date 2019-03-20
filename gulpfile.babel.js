@@ -86,6 +86,13 @@ gulp.task('umd', () => {
             cjs: 'br-validations',
             global: 'BrV',
             param: 'BrV'
+          },
+          {
+            name: 'StringMask',
+            amd: 'StringMask',
+            cjs: 'string-mask',
+            global: 'StringMask',
+            param: 'StringMask'
           }
         ]
       },

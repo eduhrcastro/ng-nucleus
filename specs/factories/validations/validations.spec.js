@@ -33,5 +33,31 @@
         expect(Validations.isTitulo(11321015019122)).toBe(false)
       })
     })
+
+    describe('isPis', () => {
+      it('should exist', () => {
+        expect(Validations.isPis).toBeDefined()
+      })
+
+      it('should return false to pis equals 000.0000.000-0', () => {
+        expect(Validations.isPis('000.0000.000-0')).toBe(false)
+      })
+
+      it('should return false to pis equals 00000000000', () => {
+        expect(Validations.isPis('00000000000')).toBe(false)
+      })
+
+      it('should return false to pis equals 3', () => {
+        expect(Validations.isPis('3')).toBe(false)
+      })
+
+      it('should return true to pis equals 120.3781.086-7', () => {
+        expect(Validations.isPis('120.3781.086-7')).toBe(true)
+      })
+
+      it('should return true to pis equals 12037810867', () => {
+        expect(Validations.isPis(12037810867)).toBe(true)
+      })
+    })
   })
 })()

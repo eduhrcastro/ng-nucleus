@@ -1,7 +1,13 @@
 (() => {
   angular.module('ngNucleus').factory('Validations', [
-    () => {
+    '$window',
+    (
+      $window
+    ) => {
       return {
+        isPis: value => {
+          return value.toString().length > 10 && value.toString().length < 15 && $window.BrV.pis.validate(value.toString())
+        },
         isTitulo: value => {
           value = value.toString()
           let dig1 = 0

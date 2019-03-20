@@ -1,12 +1,12 @@
 (function(root, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['exports', 'angular', 'moment', 'validator', 'BrV'], factory);
+        define(['exports', 'angular', 'moment', 'validator', 'BrV', 'StringMask'], factory);
     } else if (typeof exports === 'object') {
-        factory(exports, require('angular'), require('angular-moment'), require('validator'), require('br-validations'));
+        factory(exports, require('angular'), require('angular-moment'), require('validator'), require('br-validations'), require('string-mask'));
     } else {
-        factory((root.ngNucleus = {}), root.angular, root.moment, root.validator, root.BrV);
+        factory((root.ngNucleus = {}), root.angular, root.moment, root.validator, root.BrV, root.StringMask);
     }
-}(this, function (exports, angular, moment, validator, BrV) {
+}(this, function (exports, angular, moment, validator, BrV, StringMask) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28,6 +28,10 @@ if (!angular.isObject(validator) || angular.isUndefined(validator)) {
 
 if (!angular.isObject(BrV) || angular.isUndefined(BrV)) {
   throw new Error('Br-validations.js cannot be found by ng-nucleus!');
+}
+
+if (!angular.isFunction(StringMask) || angular.isUndefined(StringMask)) {
+  throw new Error('StringMask cannot be found by ng-nucleus!');
 }
 
 var _default = angular.module('ngNucleus', []);
@@ -64,6 +68,56 @@ exports.default = _default;
           }
 
           return Math.trunc(Number(input));
+        });
+      }
+    };
+  }]);
+})();
+"use strict";
+
+(function () {
+  angular.module('ngNucleus').directive('uiPis', ['Validations', '$window', function (Validations, $window) {
+    return {
+      require: 'ngModel',
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        var clearValue = function clearValue(rawValue) {
+          return rawValue.toString().replace(/[^0-9]/g, '').slice(0, 11);
+        };
+
+        var format = function format(cleanValue) {
+          var formattedValue = $window.StringMask.apply(cleanValue, '000.0000.000-0');
+          return formattedValue.trim();
+        };
+
+        var validations = function validations(value) {
+          return Validations.isPis(value);
+        };
+
+        ngModelCtrl.$parsers.push(function (value) {
+          ngModelCtrl.$setValidity('pis', true);
+
+          if (ngModelCtrl.$isEmpty(value)) {
+            ngModelCtrl.$setValidity('pis', false);
+            return value;
+          }
+
+          var cleanValue = clearValue(value.toString());
+          var formattedValue = format(cleanValue);
+
+          if (!validations(cleanValue)) {
+            ngModelCtrl.$setValidity('pis', false);
+          }
+
+          if (ngModelCtrl.$viewValue !== formattedValue) {
+            ngModelCtrl.$setViewValue(formattedValue);
+            ngModelCtrl.$render();
+          }
+
+          if (angular.isUndefined(ngModelCtrl.$viewValue)) {
+            return cleanValue;
+          }
+
+          return formattedValue;
         });
       }
     };
@@ -176,14 +230,6 @@ exports.default = _default;
           return Validations.isTitulo(value);
         };
 
-        ngModelCtrl.$formatters.push(function (value) {
-          if (ngModelCtrl.$isEmpty(value)) {
-            return value;
-          }
-
-          var cleanValue = clearValue(value.toString());
-          return format(cleanValue);
-        });
         ngModelCtrl.$parsers.push(function (value) {
           ngModelCtrl.$setValidity('titulo', true);
 
@@ -231,8 +277,11 @@ exports.default = _default;
 "use strict";
 
 (function () {
-  angular.module('ngNucleus').factory('Validations', [function () {
+  angular.module('ngNucleus').factory('Validations', ['$window', function ($window) {
     return {
+      isPis: function isPis(value) {
+        return value.toString().length > 10 && value.toString().length < 15 && $window.BrV.pis.validate(value.toString());
+      },
       isTitulo: function isTitulo(value) {
         value = value.toString();
         var dig1 = 0;

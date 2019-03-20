@@ -81,6 +81,7 @@
     "intl": "^1.2.5",
     "jquery": "^3.3.1",
     "moment": "^2.22.1",
+    "string-mask": "^0.3.0",
     "validator": "^10.2.0"
   }
 }
