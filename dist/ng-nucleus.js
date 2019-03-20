@@ -115,14 +115,9 @@ function _typeof(obj) {
   angular.module('ngNucleus').directive('uiUpperCase', [function () {
     return {
       require: 'ngModel',
-      scope: {
-        ngModel: '=ngModel'
-      },
       link: function link(scope, iElement, iAttrs, ngModelCtrl) {
-        scope.$watch('ngModel', function (value) {
-          if (value) {
-            scope.ngModel = value.toString().toUpperCase();
-          }
+        ngModelCtrl.$parsers.push(function parser(value) {
+          return value.toString().toUpperCase();
         });
       }
     };

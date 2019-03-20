@@ -3,12 +3,9 @@
     () => {
       return {
         require: 'ngModel',
-        scope: {
-          ngModel: '=ngModel'
-        },
         link: (scope, iElement, iAttrs, ngModelCtrl) => {
-          scope.$watch('ngModel', value => {
-            if (value) { scope.ngModel = value.toString().toUpperCase() }
+          ngModelCtrl.$parsers.push(function parser (value) {
+            return value.toString().toUpperCase()
           })
         }
       }
