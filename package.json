@@ -68,14 +68,22 @@
     "karma-babel-preprocessor": "^7.0.0",
     "karma-coverage": "^1.1.2",
     "karma-coveralls": "^2.1.0",
+    "karma-es6-shim": "^1.0.0",
     "karma-jasmine": "^1.1.2",
     "karma-jasmine-matchers": "*",
     "karma-mocha-reporter": "^2.2.5",
     "karma-phantomjs-launcher": "^1.0.4",
+    "phantomjs-prebuilt": "~2.1.7",
     "sass-lint": "^1.12.1",
     "umd-templates": "^0.0.3"
   },
   "dependencies": {
-    "angular": "^1.7.8"
+    "angular": "^1.7.8",
+    "angular-moment": "^1.2.0",
+    "br-validations": "^0.3.1",
+    "intl": "^1.2.5",
+    "jquery": "^3.3.1",
+    "moment": "^2.22.1",
+    "validator": "^10.2.0"
   }
 }

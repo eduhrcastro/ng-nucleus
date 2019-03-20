@@ -32,7 +32,7 @@ gulp.task('vendorsJs', () => {
     'node_modules/angular-moment/angular-moment.min.js',
     'node_modules/br-validations/releases/br-validations.min.js',
     'node_modules/validator/validator.min.js',
-    'node_modules/ng-nucleus/dist/ng-nucleus.js'
+    'node_modules/ng-nucleus/dist/ng-nucleus.min.js'
   ])
     .pipe(vendor('vendors.js'))
     .pipe(rename({ suffix: '.min' }))

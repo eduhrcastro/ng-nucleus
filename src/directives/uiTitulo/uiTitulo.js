@@ -6,9 +6,6 @@
     ) => {
       return {
         require: 'ngModel',
-        scope: {
-          ngModel: '=ngModel'
-        },
         link: (scope, iElement, iAttrs, ngModelCtrl) => {
           const clearValue = rawValue => {
             return rawValue.toString().replace(/[^0-9]/g, '').slice(0, 12)
@@ -32,7 +29,10 @@
 
           ngModelCtrl.$parsers.push(function parser (value) {
             ngModelCtrl.$setValidity('titulo', true)
-            if (ngModelCtrl.$isEmpty(value)) { return value }
+            if (ngModelCtrl.$isEmpty(value)) {
+              ngModelCtrl.$setValidity('titulo', false)
+              return value
+            }
             let cleanValue = clearValue(value.toString())
             let formattedValue = format(cleanValue)
             if (!validations(cleanValue)) { ngModelCtrl.$setValidity('titulo', false) }

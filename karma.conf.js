@@ -8,7 +8,7 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'jasmine-matchers'],
+    frameworks: ['jasmine', 'jasmine-matchers', 'es6-shim'],
 
     plugins: [
       'karma-babel-preprocessor',
@@ -17,15 +17,21 @@ module.exports = function (config) {
       'karma-phantomjs-launcher',
       'karma-mocha-reporter',
       'karma-coverage',
-      'karma-coveralls'
+      'karma-coveralls',
+      'karma-es6-shim'
     ],
 
     // list of files / patterns to load in the browser
     files: [
+      'node_modules/jquery/dist/jquery.min.js',
       'node_modules/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
-      'dist/boilerplate.js',
-      'specs/*.spec.js'
+      'node_modules/moment/min/moment-with-locales.min.js',
+      'node_modules/angular-moment/angular-moment.min.js',
+      'node_modules/br-validations/releases/br-validations.min.js',
+      'node_modules/validator/validator.min.js',
+      'dist/ng-nucleus.min.js',
+      'specs/**/*.spec.js'
     ],
 
     // list of files / patterns to exclude
@@ -35,8 +41,8 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'specs/*.spec.js': 'babel',
-      'dist/boilerplate.js': ['coverage']
+      'specs/**/*.spec.js': 'babel',
+      'dist/ng-nucleus.min.js': ['coverage']
     },
 
     babelPreprocessor: {
@@ -73,7 +79,7 @@ module.exports = function (config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_DEBUG,
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
