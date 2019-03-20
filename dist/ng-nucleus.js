@@ -37,6 +37,28 @@ var _default = angular.module('ngNucleus', []);
 exports.default = _default;
 "use strict";
 
+(function () {
+  angular.module('ngNucleus').directive('uiStringOnlyMask', [function () {
+    return {
+      require: 'ngModel',
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        ngModelCtrl.$parsers.push(function (value) {
+          var input = value.toString().replace(/[^a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-+$]/g, '');
+
+          if (input !== value) {
+            ngModelCtrl.$setViewValue(input);
+            ngModelCtrl.$render();
+          }
+
+          return String(input);
+        });
+      }
+    };
+  }]);
+})();
+
+"use strict";
+
 function _typeof(obj) {
   if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
     _typeof = function _typeof(obj) {
@@ -68,7 +90,7 @@ function _typeof(obj) {
           return Validations.isTitulo(value);
         };
 
-        ngModelCtrl.$formatters.push(function formatter(value) {
+        ngModelCtrl.$formatters.push(function (value) {
           if (ngModelCtrl.$isEmpty(value)) {
             return value;
           }
@@ -76,7 +98,7 @@ function _typeof(obj) {
           var cleanValue = clearValue(value.toString());
           return format(cleanValue);
         });
-        ngModelCtrl.$parsers.push(function parser(value) {
+        ngModelCtrl.$parsers.push(function (value) {
           ngModelCtrl.$setValidity('titulo', true);
 
           if (ngModelCtrl.$isEmpty(value)) {
@@ -116,7 +138,7 @@ function _typeof(obj) {
     return {
       require: 'ngModel',
       link: function link(scope, iElement, iAttrs, ngModelCtrl) {
-        ngModelCtrl.$parsers.push(function parser(value) {
+        ngModelCtrl.$parsers.push(function (value) {
           return value.toString().toUpperCase();
         });
       }

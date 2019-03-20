@@ -19,7 +19,7 @@
             return Validations.isTitulo(value)
           }
 
-          ngModelCtrl.$formatters.push(function formatter (value) {
+          ngModelCtrl.$formatters.push(value => {
             if (ngModelCtrl.$isEmpty(value)) {
               return value
             }
@@ -27,7 +27,7 @@
             return format(cleanValue)
           })
 
-          ngModelCtrl.$parsers.push(function parser (value) {
+          ngModelCtrl.$parsers.push(value => {
             ngModelCtrl.$setValidity('titulo', true)
             if (ngModelCtrl.$isEmpty(value)) {
               ngModelCtrl.$setValidity('titulo', false)
