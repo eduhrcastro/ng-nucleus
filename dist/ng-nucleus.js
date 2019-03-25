@@ -40,6 +40,32 @@ exports.default = _default;
 "use strict";
 
 (function () {
+  angular.module('ngNucleus').directive('uiCodeNumber', [function () {
+    return {
+      require: 'ngModel',
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        ngModelCtrl.$parsers.push(function (value) {
+          ngModelCtrl.$setValidity('code', true);
+          var input = value.toString().replace(/[^0-9]/g, '').slice(0, 4);
+
+          if (input.length !== 4 || isNaN(input)) {
+            ngModelCtrl.$setValidity('code', false);
+          }
+
+          if (input !== value.toString()) {
+            ngModelCtrl.$setViewValue(input);
+            ngModelCtrl.$render();
+          }
+
+          return input.toString();
+        });
+      }
+    };
+  }]);
+})();
+"use strict";
+
+(function () {
   angular.module('ngNucleus').directive('uiCommonName', [function () {
     return {
       require: 'ngModel',
