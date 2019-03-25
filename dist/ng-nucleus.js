@@ -40,6 +40,22 @@ exports.default = _default;
 "use strict";
 
 (function () {
+  angular.module('ngNucleus').directive('uiCommonName', [function () {
+    return {
+      require: 'ngModel',
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        ngModelCtrl.$parsers.push(function (value) {
+          return value.toString().replace(/(?:^|\s)\S/g, function (a) {
+            return a.toUpperCase();
+          });
+        });
+      }
+    };
+  }]);
+})();
+"use strict";
+
+(function () {
   angular.module('ngNucleus').directive('uiConta', ['$window', function ($window) {
     return {
       require: 'ngModel',
