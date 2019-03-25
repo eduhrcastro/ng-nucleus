@@ -40,6 +40,72 @@ exports.default = _default;
 "use strict";
 
 (function () {
+  angular.module('ngNucleus').directive('uiConta', ['$window', function ($window) {
+    return {
+      require: 'ngModel',
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        var invalidAccount = ['00000000000000', '11111111111111', '22222222222222', '33333333333333', '44444444444444', '55555555555555', '66666666666666', '77777777777777', '88888888888888', '99999999999999'];
+
+        var currentMask = function currentMask(length) {
+          var mask = '';
+
+          for (var i = 0; i < length; i++) {
+            if (i + 1 === length - 1) {
+              mask += '0-';
+            } else {
+              mask += '0';
+            }
+          }
+
+          return mask;
+        };
+
+        var clearValue = function clearValue(rawValue) {
+          return rawValue.toString().replace(/[^0-9]/g, '').slice(0, 14);
+        };
+
+        var format = function format(cleanValue) {
+          var formattedValue = $window.StringMask.apply(cleanValue, currentMask(cleanValue.length));
+          return formattedValue.trim();
+        };
+
+        var validations = function validations(value) {
+          return value && !invalidAccount.includes(value);
+        };
+
+        ngModelCtrl.$parsers.push(function parser(value) {
+          ngModelCtrl.$setValidity('conta', true);
+
+          if (ngModelCtrl.$isEmpty(value)) {
+            ngModelCtrl.$setValidity('conta', false);
+            return value;
+          }
+
+          var cleanValue = clearValue(value);
+          var formattedValue = format(cleanValue);
+
+          if (!validations(cleanValue)) {
+            ngModelCtrl.$setValidity('conta', false);
+          }
+
+          if (ngModelCtrl.$viewValue !== formattedValue) {
+            ngModelCtrl.$setViewValue(formattedValue);
+            ngModelCtrl.$render();
+          }
+
+          if (angular.isUndefined(ngModelCtrl.$viewValue)) {
+            return cleanValue;
+          }
+
+          return formattedValue;
+        });
+      }
+    };
+  }]);
+})();
+"use strict";
+
+(function () {
   angular.module('ngNucleus').directive('uiCpf', ['$window', 'Validations', function ($window, Validations) {
     return {
       require: 'ngModel',
