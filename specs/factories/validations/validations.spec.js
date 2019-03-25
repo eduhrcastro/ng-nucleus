@@ -269,5 +269,35 @@
         expect(Validations.isCpf('630880530009')).toBe(false)
       })
     })
+
+    describe('isCnpj', () => {
+      it('should exist', () => {
+        expect(Validations.isCnpj).toBeDefined()
+      })
+
+      it('should return false to cnpj 00.000.000/0000-00', () => {
+        expect(Validations.isCnpj('00.000.000/0000-00')).toBe(false)
+      })
+
+      it('should return false to cnpj 00000000000000', () => {
+        expect(Validations.isCnpj('00000000000000')).toBe(false)
+      })
+
+      it('should return true to cnpj 26.794.202/0001-46', () => {
+        expect(Validations.isCnpj('26.794.202/0001-46')).toBe(true)
+      })
+
+      it('should return true to cnpj 26794202000146', () => {
+        expect(Validations.isCnpj('26794202000146')).toBe(true)
+      })
+
+      it('should return false to cnpj abc', () => {
+        expect(Validations.isCnpj('abc')).toBe(false)
+      })
+
+      it('should return false to cpf 630880530009', () => {
+        expect(Validations.isCnpj('630880530009')).toBe(false)
+      })
+    })
   })
 })()

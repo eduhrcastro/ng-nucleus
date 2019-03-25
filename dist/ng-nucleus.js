@@ -40,6 +40,55 @@ exports.default = _default;
 "use strict";
 
 (function () {
+  angular.module('ngNucleus').directive('uiCnpj', ['$window', 'Validations', function ($window, Validations) {
+    return {
+      require: 'ngModel',
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        var clearValue = function clearValue(rawValue) {
+          return rawValue.replace(/[^\d]/g, '').slice(0, 14);
+        };
+
+        var format = function format(cleanValue) {
+          return ($window.StringMask.apply(cleanValue, '00.000.000/0000-00') || '').trim();
+        };
+
+        var validations = function validations(value) {
+          return angular.isDefined(value) && Validations.isCnpj(value);
+        };
+
+        ngModelCtrl.$parsers.push(function parser(value) {
+          ngModelCtrl.$setValidity('cnpj', true);
+
+          if (ngModelCtrl.$isEmpty(value)) {
+            ngModelCtrl.$setValidity('cnpj', false);
+            return value;
+          }
+
+          var cleanValue = clearValue(value);
+          var formattedValue = format(cleanValue);
+
+          if (!validations(cleanValue)) {
+            ngModelCtrl.$setValidity('cnpj', false);
+          }
+
+          if (ngModelCtrl.$viewValue !== formattedValue) {
+            ngModelCtrl.$setViewValue(formattedValue);
+            ngModelCtrl.$render();
+          }
+
+          if (angular.isUndefined(ngModelCtrl.$viewValue)) {
+            return cleanValue;
+          }
+
+          return formattedValue;
+        });
+      }
+    };
+  }]);
+})();
+"use strict";
+
+(function () {
   angular.module('ngNucleus').directive('uiCodeNumber', [function () {
     return {
       require: 'ngModel',
@@ -625,6 +674,9 @@ exports.default = _default;
 (function () {
   angular.module('ngNucleus').factory('Validations', ['$window', function ($window) {
     return {
+      isCnpj: function isCnpj(value) {
+        return $window.BrV.cnpj.validate(value.toString());
+      },
       isCpf: function isCpf(value) {
         return $window.BrV.cpf.validate(value.toString());
       },

@@ -5,6 +5,9 @@
       $window
     ) => {
       return {
+        isCnpj: value => {
+          return $window.BrV.cnpj.validate(value.toString())
+        },
         isCpf: value => {
           return $window.BrV.cpf.validate(value.toString())
         },
