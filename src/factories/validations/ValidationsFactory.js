@@ -5,6 +5,9 @@
       $window
     ) => {
       return {
+        isCpf: value => {
+          return $window.BrV.cpf.validate(value.toString())
+        },
         isDate: (value, dateFormat) => {
           if (angular.isUndefined(dateFormat) || dateFormat === '') { return moment(value).isValid() }
           return moment(value, dateFormat).isValid() && value.length === dateFormat.length

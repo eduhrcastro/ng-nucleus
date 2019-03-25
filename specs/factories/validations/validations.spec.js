@@ -239,5 +239,35 @@
         expect(Validations.isDate('2019-03-20T17:34:37+00:00')).toBe(true)
       })
     })
+
+    describe('isCpf', () => {
+      it('should exist', () => {
+        expect(Validations.isCpf).toBeDefined()
+      })
+
+      it('should return false to cpf 000.000.000-00', () => {
+        expect(Validations.isCpf('000.000.000-00')).toBe(false)
+      })
+
+      it('should return false to cpf 00000000000', () => {
+        expect(Validations.isCpf('00000000000')).toBe(false)
+      })
+
+      it('should return true to cpf 630.880.530-00', () => {
+        expect(Validations.isCpf('630.880.530-00')).toBe(true)
+      })
+
+      it('should return true to cpf 63088053000', () => {
+        expect(Validations.isCpf('63088053000')).toBe(true)
+      })
+
+      it('should return false to cpf abc', () => {
+        expect(Validations.isCpf('abc')).toBe(false)
+      })
+
+      it('should return false to cpf 630880530009', () => {
+        expect(Validations.isCpf('630880530009')).toBe(false)
+      })
+    })
   })
 })()

@@ -40,6 +40,55 @@ exports.default = _default;
 "use strict";
 
 (function () {
+  angular.module('ngNucleus').directive('uiCpf', ['$window', 'Validations', function ($window, Validations) {
+    return {
+      require: 'ngModel',
+      link: function link(scope, iElement, iAttrs, ngModelCtrl) {
+        var clearValue = function clearValue(rawValue) {
+          return rawValue.toString().replace(/[^\d]/g, '').slice(0, 11);
+        };
+
+        var format = function format(cleanValue) {
+          return ($window.StringMask.apply(cleanValue, '000.000.000-00') || '').trim();
+        };
+
+        var validations = function validations(value) {
+          return angular.isDefined(value) && Validations.isCpf(value);
+        };
+
+        ngModelCtrl.$parsers.push(function (value) {
+          ngModelCtrl.$setValidity('cpf', true);
+
+          if (ngModelCtrl.$isEmpty(value)) {
+            ngModelCtrl.$setValidity('cpf', false);
+            return value;
+          }
+
+          var cleanValue = clearValue(value);
+          var formattedValue = format(cleanValue);
+
+          if (!validations(cleanValue)) {
+            ngModelCtrl.$setValidity('cpf', false);
+          }
+
+          if (ngModelCtrl.$viewValue !== formattedValue) {
+            ngModelCtrl.$setViewValue(formattedValue);
+            ngModelCtrl.$render();
+          }
+
+          if (angular.isUndefined(ngModelCtrl.$viewValue)) {
+            return cleanValue;
+          }
+
+          return formattedValue;
+        });
+      }
+    };
+  }]);
+})();
+"use strict";
+
+(function () {
   angular.module('ngNucleus').directive('uiDate', ['$locale', 'Validations', function ($locale, Validations) {
     return {
       require: 'ngModel',
@@ -468,6 +517,9 @@ exports.default = _default;
 (function () {
   angular.module('ngNucleus').factory('Validations', ['$window', function ($window) {
     return {
+      isCpf: function isCpf(value) {
+        return $window.BrV.cpf.validate(value.toString());
+      },
       isDate: function isDate(value, dateFormat) {
         if (angular.isUndefined(dateFormat) || dateFormat === '') {
           return moment(value).isValid();
